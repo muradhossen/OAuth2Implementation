@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Catalyzr.Engine.Models.Client;
+using Microsoft.EntityFrameworkCore;
 
 namespace Open.Server
 {
@@ -8,5 +9,7 @@ namespace Open.Server
         {
 
         }
+
+        public DbSet<Client> CZ_Clients { get; set; }
     }
 }

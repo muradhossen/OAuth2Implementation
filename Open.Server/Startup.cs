@@ -67,7 +67,7 @@ namespace Open.Server
                     //options.DisableScopeValidation();
 
 
-                    options.RegisterScopes(Scopes.OpenId,Scopes.Phone);
+                    options.RegisterScopes(Scopes.OpenId,Scopes.Phone, ResponseTypes.Code);
 
 
                     // Enable the client credentials flow.
