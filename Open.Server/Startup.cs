@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +25,7 @@ namespace Open.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllers();
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -67,11 +68,11 @@ namespace Open.Server
                     //options.DisableScopeValidation();
 
 
-                    options.RegisterScopes(Scopes.OpenId,Scopes.Phone, ResponseTypes.Code);
+                    options.RegisterScopes(Scopes.OpenId, Scopes.Roles);
 
 
                     // Enable the client credentials flow.
-                    //options.AllowClientCredentialsFlow();
+                    options.AllowClientCredentialsFlow();
 
                     options.AllowPasswordFlow();
 
@@ -82,7 +83,9 @@ namespace Open.Server
                     // Register the ASP.NET Core host and configure the ASP.NET Core options.
                     options
                         .UseAspNetCore()
-                        .EnableTokenEndpointPassthrough();
+                        .EnableTokenEndpointPassthrough()
+                        .EnableUserinfoEndpointPassthrough()
+                        .EnableAuthorizationEndpointPassthrough();
                 })
 
                 // Register the OpenIddict validation components.
@@ -94,6 +97,12 @@ namespace Open.Server
                     // Register the ASP.NET Core host.
                     options.UseAspNetCore();
                 });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+            });
+
 
             // Register the worker responsible of seeding the database with the sample clients.
             // Note: in a real world application, this step should be part of a setup script.
@@ -131,6 +140,13 @@ namespace Open.Server
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //// Register the OpenIddict token validation middleware.
+            //app.UseOpenIddictValidation();
+
+            //// Register the OpenIddict server middleware.
+            //app.UseOpenIddictServer();
+
 
             app.UseEndpoints(options =>
             {

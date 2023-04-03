@@ -29,7 +29,7 @@ namespace Open.Server
 
 
 
-             foreach ( var client in clients)
+            foreach (var client in clients)
             {
                 if (await manager.FindByClientIdAsync(client.ClientId) is null)
                 {
@@ -37,14 +37,15 @@ namespace Open.Server
                     {
                         ClientId = client.ClientId,
                         ClientSecret = client.ClientSecret,
-                        DisplayName = "My client application",
+                        DisplayName = "My client application",                        
                         Permissions =
-                    {
-                        Permissions.Endpoints.Token,
-                        Permissions.GrantTypes.Password,
-                        Permissions.Endpoints.Authorization,
-                        Permissions.GrantTypes.ClientCredentials
-                    }
+                        {
+                            Permissions.Endpoints.Token,
+                            Permissions.Endpoints.Authorization,
+                            Permissions.GrantTypes.Password,
+                            Permissions.GrantTypes.ClientCredentials,
+                            "ept:userinfo"
+                        }
                     });
                 }
             }
